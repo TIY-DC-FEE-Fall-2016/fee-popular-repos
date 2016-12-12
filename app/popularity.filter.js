@@ -1,0 +1,28 @@
+(function() {
+  'use strict';
+
+  angular.module('gh')
+    .filter('popularity', PopularityFilter);
+
+    function PopularityFilter() {
+      return function orderPopularity(input) {
+
+          var popularity = input.map(function getScore(repo) {
+            var pop = repo.stargazers_count + ((2 * repo.forks_count) + (repo.open_issues_count/2));
+            repo.popularity = pop;
+            return repo;
+          })
+
+          popularity = popularity.sort(function sortPopularity(a,b) {
+            if(a.popularity > b.popularity) {
+              return -1;
+            } else {
+              return 1;
+            }
+          });
+
+          return popularity;
+        }
+      };
+
+}());
